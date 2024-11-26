@@ -1,0 +1,60 @@
+ <%= stylesheet_link_tag 'posts', media: 'all' %>
+<div class='comment <%= "hidden_c" if comment.parent.present? %>'>
+  <div class='comment_ava float'>
+    <%= render "autors/avatar", autor: comment.autor %>
+  </div>
+  <div class='float'>
+      <b><%= comment.autor.email || comment.autor.full_name %></b>
+  </div>
+  <div id="comment_<%= comment.id%>" class='full'>
+      <button name='true' data-comment_id="<%= comment.id%>" class='like vote pressed-button btn-outline-success'><i class='fa fa-thumbs-up'></i></button>
+      <i><%= comment.count_likes %></i>&nbsp;
+      <button name= 'false' data-comment_id="<%= comment.id%>" class='dislike vote pressed-button btn-outline-danger'><i class='fa fa-thumbs-down'></i></button>
+      <i><%= comment.count_dislikes %></i>&nbsp;|
+      <%if comment.created_at < comment.updated_at%><b>edited</b> |<%end%>
+      <% less_than_hour = comment.created_at >= 1.hour.ago %>
+      <% time = distance_of_time_in_words(comment.created_at, Time.now)%>
+      <span class='block'><i> created  <%= time  %> ago</i></span>
+  </div>
+  <div class='comment_body'>
+    <%= comment.body %>
+  </div>    
+    <% if !current_autor.nil? && current_autor.id == comment.autor.id && less_than_hour %>
+      <span class='comment_form_parent'>   
+        <i class='fa fa-pencil-square-o pressed-button btn-warning edit_comment'></i>
+                <i class='pressed-button'>
+          <%= link_to 'DELETE', [comment.post, comment],
+                    method: :delete,
+                    data: { confirm: "Are you sure?" }, remote: true %>
+        </i>
+        <div class='cont add_comment update_comment invisible'>
+          <h6>Edit Comment</h6>
+          <%= render 'posts/comment_form', comment: comment, parent_comment: comment.parent%>
+        </div>          
+      <!--<% if comment.status == 'unpublished' %>
+        <div class='btn btn-primary'>
+          <%= link_to 'Publish Comment', publish_post_comment_path(@post.id, comment.id), method: :post %>
+        </div>
+      <% end %> -->
+
+      </span>
+    <% end %>
+    
+    <% if !current_autor.nil? && comment.depth < 4  %>
+    <span class='comment_form_parent'>
+    <span class='pressed-button edit_comment'>Answer</span>
+    <div class='cont add_comment update_comment invisible'>
+        <br/>
+        <%= render 'posts/comment_form', parent_comment: comment%>
+      </div>
+    </span>
+    <%end%>
+
+    <% if comment.children.present? %>
+      <i class='comment'></i>
+      <% comment.children.each do |child| %>   
+          <%= render 'posts/comment_one', comment: child%>
+      <% end %>  
+    <% end %>
+
+</div>

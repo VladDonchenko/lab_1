@@ -1,0 +1,29 @@
+<script>
+  $(function(){
+   /* $("#comments_select").change(function(){
+      $('#comments_show').submit()
+    })*/
+     $(".edit_comment").click(function(){
+      var $parent = $(this).parent('.comment_form_parent');
+      var $comment = $parent.find('.update_comment');
+      var $button = $(this);
+      console.log($parent, $comment, $button)
+      $comment.removeClass("invisible")
+      $button.addClass('invisible')
+    })
+  })
+</script>
+
+<!--<form action="<%= post_path(@post) %>" method='get' id='comments_show'>
+  <div class='field'>
+    <select name='comments_status' class='pressed-button' id='comments_select'>
+      <option <%= @comment_status == 'published' ? 'selected' : '' %> >Published</option>
+      <option <%= @comment_status == 'unpublished' ? 'selected' : '' %> >Unpublished</option>
+    </select> 
+  </div>
+</form>-->
+
+<% @comments.select(&:root?).each do |comment| %>
+  <br/>
+<%= render 'posts/comment_one', comment: comment%>
+<% end %>

@@ -1,0 +1,63 @@
+<% if @show_register %>
+  <script>
+    $(function(){   
+      $(".modal_login").show()           
+      $('.close').click(function(){
+        $(".modal_login").css("display", "none")
+      }); 
+    })
+  </script>
+<%end%>
+
+<p>
+  <strong>Name:</strong>
+  <%= @post.name %>
+</p>
+
+<p>
+  <div style="text-align: center; font-size: 50px; border: 1px #000000 solid;">
+  <%= @post.title %>
+</div>
+</p>
+
+<div class="image" style="text-align: center;">
+	<img src='<%= @post.image %>' width='400px'/>
+  <img src='<%= @post.main_image %>' width='600px'/>
+  <img src='<%= @post.second_image %>' width='400px'/>
+  <img src="<%=@post.img%>"/>
+</div>
+
+
+
+<p>
+  <div style="text-align: center; border: 1px #000000 solid;">
+  <%= @post.content %>
+  </div>
+</p>
+
+
+<%= link_to 'Back', posts_path %>
+
+<% if !current_autor.nil? && current_autor.id == @post.autor.id %>
+      <%= link_to 'Edit', edit_post_path(@post) %>
+      <%= link_to 'Destroy post', @post, method: :delete, data: { confirm: 'Are you sure?' } %>
+<%end%>
+
+<h2><%= @post.views%></h2>
+<%= render 'posts/modal'%>
+
+<div class='cont add_comment'>
+ <% if !current_autor.nil? %>   
+    <h4>New Comment</h4>
+              <%= render 'posts/comment_form', parent_comment: nil %>
+  <% else %>
+    <h6>Please, <%= link_to "Log in", '/login', method: :get%> or <%= link_to "Sign Up", '/autors/new'%> to leave a comment</h6>
+  <% end %>
+</div>
+
+<div class='cont comment_list'>
+  <h4>Comments: <%= @post.comments.count%></h4>
+  
+  <%= render 'posts/comments_list' %>
+</div>
+

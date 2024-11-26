@@ -1,0 +1,19 @@
+<%if autor.avatar.present?%>
+  <div>
+  	  <style>
+   img {
+    border: 3px solid #000000;
+   }
+  </style>
+    <img src='<%= autor.avatar %>' width='150px'/>
+  </div>
+<% else %>
+  <div>
+  	  <style>
+   img {
+    border: 3px solid #00a8e1;
+   }
+  </style>
+    <img src='https://socialvk.ru/wp-content/uploads/avatarka-pustaya-vk_0.jpg' width='150px'/>
+  </div>
+<% end %>
